@@ -25,3 +25,12 @@ export const logoutUser = async () => {
     throw new Error(error.response.data.message);
   }
 };
+
+export const checkUserAuthentication = async (token) => {
+  try {
+    const response = await API.post("/check-authentication", { token });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};

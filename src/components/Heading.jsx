@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSignedIn, signOutUser } from "../store/user/userSlice";
+import { selectSignedIn } from "../store/user/userSlice";
+import { signOutUser } from "../store/user/userActions";
 import { logoutUser } from "../services/authService";
 
 const Heading = () => {

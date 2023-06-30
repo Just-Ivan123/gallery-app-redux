@@ -1,41 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
-import { fetchGalleries, getGalleries } from '../store/gallery/galleryActions';
+import { Link, useParams, useLocation } from "react-router-dom";
+import { fetchUserGalleries, getUserGalleries } from '../store/gallery/galleryActions';
 
-
-const AllGalleries = () => {
-
+const UserGalleries = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const location = useLocation();
   const galleries = useSelector((state) => state.gallery.galleries);
+  const authenticatedUserId = useSelector((state) => state.user.user.id);
   const [searchQuery, setSearchQuery] = useState('');
   const currentPage = useSelector((state) => state.gallery.currentPage);
   const lastPage = useSelector((state) => state.gallery.lastPage);
+  const user_id = location.pathname === "/my-galleries" ? authenticatedUserId : id;
 
   useEffect(() => {
-    dispatch(getGalleries());
-  }, [location.pathname]);
+    const fetchData = async () => {
+          dispatch(getUserGalleries(user_id));
+    };
+
+    if (authenticatedUserId) {
+      fetchData();
+    }
+   
+  }, []);
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
   };
   
   const handleSearchButtonClick = () => {
-    dispatch(getGalleries(searchQuery));
+    dispatch(getUserGalleries(user_id, searchQuery));
   };
 
   const handleClearSearchButtonClick = () => {
-    dispatch(getGalleries());
+    dispatch(getUserGalleries(user_id));
     setSearchQuery('');
   };
 
   const loadMoreGalleries = () => {
     if(searchQuery === ''){
-    dispatch(fetchGalleries(currentPage + 1, searchQuery));
-    }else{
-      dispatch(fetchGalleries(currentPage + 1));
-    }
+      dispatch(fetchUserGalleries(user_id, currentPage + 1, searchQuery));
+      }else{
+        dispatch(fetchUserGalleries(user_id, currentPage + 1));
+      }
   };
 
   return (
@@ -104,4 +112,4 @@ const AllGalleries = () => {
   );
 };
 
-export default AllGalleries;
+export default UserGalleries;

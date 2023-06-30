@@ -32,7 +32,6 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Проверка наличия заполненных полей
     if (
       !user.first_name ||
       !user.last_name ||
@@ -42,31 +41,31 @@ const Register = () => {
       !user.terms
     ) {
       setErrors({
-        form: "Please fill in all fields", // Установка общей ошибки для формы
+        form: "Please fill in all fields", 
       });
-      return; // Прекращение выполнения функции
+      return; 
     }
 
-    try {
-      await dispatch(signUpUser(user, navigate));
-      setResponse("Registration successful!");
-      setUser({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-        terms: false,
-      });
-      setErrors({});
-      setTimeout(() => {
-        setResponse(""); // Очистка сообщения об успешной регистрации
-      }, 3000);
-    } catch (error) {
-      console.error(error); // Обработка ошибки регистрации
-      setErrors({
-        form: error.message, // Установка общей ошибки для формы
-      });
+    if (isSignedIn === true){
+      navigate('/');
+    }else{
+      try {
+        await dispatch(signUpUser(user, navigate));
+        setUser({
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          password_confirmation: "",
+          terms: false,
+        });
+        setErrors({});
+      } catch (error) {
+        console.error(error); 
+        setErrors({
+          form: error.message, 
+        });
+      }
     }
   };
 

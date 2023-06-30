@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { postGallery } from '../store/gallery/galleryActions';
-import { fetchGalleries } from "../store/gallery/galleryActions";
+
 
 const AddGalleryForm = () => {
   const dispatch = useDispatch();
@@ -12,13 +12,8 @@ const AddGalleryForm = () => {
   const [imageUrls, setImageUrls] = useState(['']);
   const [errors, setErrors] = useState({});
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (imageUrls.length === 0 || imageUrls.every((url) => url === '')) {
-      return;
-    }
 
     const galleryData = {
       title,
@@ -27,16 +22,14 @@ const AddGalleryForm = () => {
     };
 
     dispatch(postGallery(galleryData))
-      .then(() => dispatch(fetchGalleries(1)))
       .then(() => navigate('/my-galleries'))
       .catch((error) => {
-            console.log('Validation error:', error);
+            console.log(error);
             setErrors({
-              form: 'Validation error:', // Установка общей ошибки для формы
+              form: 'Validation error:', error 
             });
       });
   };
-
 
 
   const handleTitleChange = (e) => {
@@ -96,7 +89,7 @@ const AddGalleryForm = () => {
     <form onSubmit={handleSubmit} className="container" style={{ width: '500px' }}>
       <div className="mb-3">
         <label htmlFor="title" className="form-label">
-          Заголовок:
+          Title:
         </label>
         <input
           type="text"
@@ -109,7 +102,7 @@ const AddGalleryForm = () => {
       </div>
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
-          Описание:
+          Description:
         </label>
         <textarea
           className="form-control"
@@ -119,7 +112,7 @@ const AddGalleryForm = () => {
         />
       </div>
       <div className="mb-3">
-        <label className="form-label">URL-адресы изображений:</label>
+        <label className="form-label">URL-images:</label>
         {imageUrls.map((url, index) => (
           <div key={index} className="input-group mb-3">
             <input
@@ -136,7 +129,7 @@ const AddGalleryForm = () => {
                   className="btn btn-outline-danger"
                   onClick={() => removeImageUrlField(index)}
                 >
-                  Удалить
+                  Delete
                 </button>
                 {index > 0 && (
                   <button
@@ -144,7 +137,7 @@ const AddGalleryForm = () => {
                     className="btn btn-outline-secondary"
                     onClick={() => moveImageUrlUp(index)}
                   >
-                    Вверх
+                    Up
                   </button>
                 )}
                 {index < imageUrls.length - 1 && (
@@ -153,7 +146,7 @@ const AddGalleryForm = () => {
                     className="btn btn-outline-secondary"
                     onClick={() => moveImageUrlDown(index)}
                   >
-                    Вниз
+                    Down
                   </button>
                 )}
               </div>
@@ -161,7 +154,7 @@ const AddGalleryForm = () => {
           </div>
         ))}
         <button type="button" className="btn btn-primary" onClick={addImageUrlField}>
-          Добавить другой URL-адрес
+          Add image
         </button>
       </div>
       {errors.form && (
@@ -171,10 +164,10 @@ const AddGalleryForm = () => {
         )}
       <div>
         <button type="submit" className="btn btn-primary" >
-          Отправить
+          Submit
         </button>
         <button type="button" className="btn btn-secondary" onClick={() => navigate('/my-galleries')}>
-          Отмена
+          Cancel
         </button>
       </div>
     </form>

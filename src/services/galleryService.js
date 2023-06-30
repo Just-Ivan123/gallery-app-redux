@@ -1,13 +1,20 @@
 import { API } from "../shared/api";
 
-export const getAllGalleries = async (currentPage) => {
-    try {
-      const response = await API.get(`/galleries?page=${currentPage}`);
-      return response;
-    } catch (error) {
-      throw new Error(error.response.data.message);
+export const getAllGalleries = async (currentPage = null, searchQuery = null) => {
+  try {
+    let url = "/galleries";
+    if (currentPage !== null) {
+      url += `?page=${currentPage}`;
     }
-  };
+    if (searchQuery) {
+      url += currentPage !== null ? `&search=${searchQuery}` : `?search=${searchQuery}`;
+    }
+    const response = await API.get(url);
+    return response;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
   
   export const getGalleryById = async (id) => {
     try {
@@ -18,10 +25,17 @@ export const getAllGalleries = async (currentPage) => {
     }
   };
   
-  export const getUserGalleries = async (userId) => {
+  export const getUserGalleries = async (user_id, currentPage = null, searchQuery = null) => {
     try {
-      const response = await API.get(`/galleries/author/${userId}`);
-      return response.data;
+      let url = `/galleries/author/${user_id}`;
+      if (currentPage !== null) {
+        url += `?page=${currentPage}`;
+      }
+      if (searchQuery) {
+        url += currentPage !== null ? `&search=${searchQuery}` : `?search=${searchQuery}`;
+      }
+      const response = await API.get(url);
+      return response;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -30,7 +44,7 @@ export const getAllGalleries = async (currentPage) => {
   export const createGallery = async (galleryData) => {
     try {
       const response = await API.post("/galleries", galleryData);
-      return response.data;
+      return response;
     } catch (error) {
       throw new Error(error);
     }

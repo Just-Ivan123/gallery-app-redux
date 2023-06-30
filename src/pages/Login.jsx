@@ -13,7 +13,6 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [response, setResponse] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,25 +22,25 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Проверка наличия заполненных полей
+    
     if (!credentials.email || !credentials.password) {
       setErrors({
-        form: "Please fill in all fields", // Установка общей ошибки для формы
+        form: "Please fill in all fields", 
       });
-      return; // Прекращение выполнения функции
+      return; 
     }
+    if (isSignedIn === true){
+      navigate('/');
+    }else{
+      try {
+        await dispatch(signInUser(credentials, navigate));
 
-    try {
-      await dispatch(signInUser(credentials, navigate));
-      setResponse("Signed in successfully!");
-      setTimeout(() => {
-        setResponse(""); // Очистка сообщения об успешной регистрации
-      }, 3000);
-    } catch (error) {
-      console.error(error); // Обработка ошибки входа
-      setErrors({
-        form: error.message, // Установка общей ошибки для формы
-      });
+      } catch (error) {
+        console.error(error); 
+        setErrors({
+          form: error.message, 
+        });
+      }
     }
   };
 
@@ -88,11 +87,7 @@ const Login = () => {
             {errors.form}
           </div>
         )}
-        {response && (
-          <div className="alert alert-success" role="alert">
-            {response}
-          </div>
-        )}
+       
         <button type="submit" className="btn btn-primary">
           Login
         </button>
