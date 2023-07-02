@@ -77,12 +77,16 @@ const UserGalleries = () => {
                     width="100"
                     height="300"
                   />
+                   <Link
+                      to={`/galleries/${gallery.id}`}
+                    >
                   <h3 className="card-text">{gallery.title}</h3>
+                  </Link>
                   <Link
                       to={`/galleries/author/${gallery.user.id}`}
                     >
                   <div className="mb-1 text-body-secondary">
-                    {gallery.user.first_name} {gallery.user.last_name} {gallery.user.id}
+                    {gallery.user.first_name} {gallery.user.last_name} 
                   </div>
                   </Link>
                   <p className="card-text">{gallery.description}</p>

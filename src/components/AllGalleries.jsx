@@ -62,6 +62,11 @@ const AllGalleries = () => {
             <div key={gallery.id} className="col m-5" style={{ width: "340px" }}>
               <div className="card shadow-sm">
                 <div className="card-body bg-light border rounded border">
+                <Link
+                      to={`/galleries/${gallery.id}`} 
+                    >
+                  <h3 className="card-text">{gallery.title}</h3>
+                  </Link>
                   <img
                     src={gallery.images[0].url}
                     className="card-img-top"
@@ -69,12 +74,12 @@ const AllGalleries = () => {
                     width="100"
                     height="300"
                   />
-                  <h3 className="card-text">{gallery.title}</h3>
+                  
                   <Link
                       to={`/galleries/author/${gallery.user.id}`}
                     >
                   <div className="mb-1 text-body-secondary">
-                    {gallery.user.first_name} {gallery.user.last_name} {gallery.user.id}
+                    {gallery.user.first_name} {gallery.user.last_name} 
                   </div>
                   </Link>
                   <p className="card-text">{gallery.description}</p>

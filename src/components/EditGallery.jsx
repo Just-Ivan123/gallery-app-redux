@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { postGallery } from '../store/gallery/galleryActions';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getGallery, updateGalleryById } from '../store/gallery/galleryActions';
 
 
-const AddGalleryForm = () => {
+const EditGallery = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [imageUrls, setImageUrls] = useState(['']);
+  const { id } = useParams();
+  const gallery = useSelector((state) => state.gallery.currentGallery);
+  const [title, setTitle] = useState(gallery?.title || "");
+  const [description, setDescription] = useState(gallery?.description || "");
+  const [imageUrls, setImageUrls] = useState(gallery?.images?.map((image) => image.url) || []);
   const [errors, setErrors] = useState({});
+  const authenticatedUserId = useSelector((state) => state.user.user.id);
+
+  useEffect(() => {
+    
+    if (gallery) {
+      
+      setTitle(gallery.title);
+      setDescription(gallery.description);
+      setImageUrls(gallery.images.map((image) => image.url));
+      }else{
+        navigate('/');
+      }
+   
+  }, [gallery]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,12 +37,12 @@ const AddGalleryForm = () => {
       imageUrls,
     };
 
-    dispatch(postGallery(galleryData))
-      .then(() => navigate('/my-galleries'))
+    dispatch(updateGalleryById(id, galleryData))
+      .then(() => navigate(`/galleries/${gallery.id}`))
       .catch((error) => {
-            console.log(error.message);
+            console.log(error);
             setErrors({
-              form: error.message
+              form: 'Validation error:', error 
             });
       });
   };
@@ -119,7 +135,6 @@ const AddGalleryForm = () => {
               type="text"
               className="form-control"
               value={url}
-              placeholder="png/jpg/jpeg format"
               onChange={(e) => handleImageUrlChange(index, e)}
               required
             />
@@ -167,7 +182,7 @@ const AddGalleryForm = () => {
         <button type="submit" className="btn btn-primary" >
           Submit
         </button>
-        <button type="button" className="btn btn-secondary" onClick={() => navigate('/my-galleries')}>
+        <button type="button" className="btn btn-secondary" onClick={() => navigate(`/galleries/${gallery.id}`)}>
           Cancel
         </button>
       </div>
@@ -175,4 +190,4 @@ const AddGalleryForm = () => {
   );
 };
 
-export default AddGalleryForm;
+export default EditGallery;

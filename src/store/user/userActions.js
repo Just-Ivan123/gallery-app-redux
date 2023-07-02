@@ -14,7 +14,6 @@ export const signInUser = (credentials, navigate) => async (dispatch) => {
       await dispatch(setSignedIn(true));
       navigate("/");
     }
-    console.log(response); 
   } catch (error) {
     console.error(error); 
     throw error;
@@ -33,7 +32,7 @@ export const signUpUser = (user, navigate) => async (dispatch) => {
       navigate("/");
     }
   } catch (error) {
-   
+   console.log(error);
     throw error;
   }
 };

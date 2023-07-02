@@ -9,6 +9,8 @@ import AllGalleries from "./components/AllGalleries";
 import UserGalleries from "./components/UserGalleries";
 import { setUser, setSignedIn } from "./store/user/userSlice";
 import {checkUserAuthentication} from "./services/authService";
+import SingleGallery from "./components/SingleGallery";
+import EditGallery from "./components/EditGallery";
 
 
 const App = () => {
@@ -17,14 +19,12 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {
-     console.log(token);
       checkUserAuthentication(token)
         .then((response) => {
           dispatch(setUser(response.user));
           dispatch(setSignedIn(true));
         })
         .catch((error) => {
-          console.log(token);
           console.error(error);
           
           localStorage.removeItem("access_token");
@@ -58,8 +58,24 @@ const App = () => {
       <Route
         path="/galleries/author/:id"
         element={
-          <ProtectedRoute>
+          
             <UserGalleries />
+          
+        }
+      />
+      <Route
+        path="/galleries/:id"
+        element={
+          
+            <SingleGallery />
+          
+        }
+      />
+      <Route
+        path="/edit-gallery/:id"
+        element={
+          <ProtectedRoute>
+            <EditGallery />
           </ProtectedRoute>
         }
       />

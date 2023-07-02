@@ -17,7 +17,6 @@ const Register = () => {
     terms: false,
   });
   const [errors, setErrors] = useState({});
-  const [response, setResponse] = useState("");
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -37,11 +36,17 @@ const Register = () => {
       !user.last_name ||
       !user.email ||
       !user.password ||
-      !user.password_confirmation ||
-      !user.terms
+      !user.password_confirmation
     ) {
       setErrors({
         form: "Please fill in all fields", 
+      });
+      return; 
+    }
+
+    if(!user.terms){
+      setErrors({
+        form: "Please accept terms", 
       });
       return; 
     }
@@ -144,11 +149,6 @@ const Register = () => {
         {errors.form && (
           <div className="alert alert-danger" role="alert">
             {errors.form}
-          </div>
-        )}
-        {response && (
-          <div className="alert alert-success" role="alert">
-            {response}
           </div>
         )}
         <button type="submit" className="btn btn-primary">

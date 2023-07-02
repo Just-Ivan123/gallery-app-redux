@@ -19,7 +19,7 @@ export const getAllGalleries = async (currentPage = null, searchQuery = null) =>
   export const getGalleryById = async (id) => {
     try {
       const response = await API.get(`/galleries/${id}`);
-      return response.data;
+      return response;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -46,14 +46,14 @@ export const getAllGalleries = async (currentPage = null, searchQuery = null) =>
       const response = await API.post("/galleries", galleryData);
       return response;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.response.data.message);
     }
   };
   
   export const updateGallery = async (galleryData, id) => {
     try {
       const response = await API.put(`/galleries/${id}`, galleryData);
-      return response.data;
+      return response;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -62,7 +62,25 @@ export const getAllGalleries = async (currentPage = null, searchQuery = null) =>
   export const deleteGallery = async (id) => {
     try {
       const response = await API.delete(`/galleries/${id}`);
-      return response.data;
+      return response;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+  
+  export const postComment = async (comment) => {
+    try{
+      const response = await API.post('/galleries/comment', comment);
+      return response;
+    }catch(error){
+      throw new Error(error.response.data.message);
+    }
+  };
+
+  export const deleteComment = async (id) => {
+    try {
+      const response = await API.delete(`/galleries/comment/${id}`);
+      return response;
     } catch (error) {
       throw new Error(error.response.data.message);
     }

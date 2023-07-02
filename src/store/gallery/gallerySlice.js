@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   galleries: [],
+  currentGallery: null,
   currentPage: 1,
   lastPage: 1,
   searchQuery: '',
@@ -18,8 +19,7 @@ const gallerySlice = createSlice({
       
     },
     addGallery: (state, action) => {
-      console.log(action.payload);
-      state.allGalleries.unshift(action.payload);
+      state.galleries.unshift(action.payload);
     },
     updateGallery: (state, action) => {
       const updatedGallery = action.payload;
@@ -29,14 +29,26 @@ const gallerySlice = createSlice({
       if (index !== -1) {
         state.galleries[index] = updatedGallery;
       }
-      state.currentPage = updatedGallery.page;
-      state.lastPage = updatedGallery.last_page;
+    },
+    removeGallery: (state, action) => {
+      const galleryIdToRemove = action.payload;
+      state.galleries = state.galleries.filter((gallery) => gallery.id !== galleryIdToRemove);
+    },
+    setCurrentGallery: (state, action) => {
+      state.currentGallery = action.payload;
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
     },
     setLastPage: (state, action) => {
       state.lastPage = action.payload;
+    },
+    addComment:(state, action) => {
+      state.currentGallery.comments.unshift(action.payload);
+    },
+    removeComment: (state, action) => {
+      const commentIdToRemove = action.payload;
+      state.currentGallery.comments = state.currentGallery.comments.filter((comment) => comment.id !== commentIdToRemove);
     },
     
   },
@@ -48,6 +60,10 @@ export const {
   setCurrentPage,
   setLastPage,
   setSearchQuery,
+  setCurrentGallery,
+  removeGallery,
+  addComment,
+  removeComment,
 } = gallerySlice.actions;
 
 export default gallerySlice.reducer;

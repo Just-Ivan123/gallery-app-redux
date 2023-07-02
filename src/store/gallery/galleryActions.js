@@ -1,9 +1,20 @@
-  import { setGalleries, addGallery, updateGallery } from "./gallerySlice";
+  import {
+     setGalleries,
+     addGallery,
+      updateGallery,
+       setCurrentGallery,
+      removeGallery as removeGallerySlice,
+    addComment,
+    removeComment as removeCommentSlice } from "./gallerySlice";
   import {
     getAllGalleries,
     createGallery,
     updateGallery as updateGalleryService,
-    getUserGalleries as getUserGalleriesService
+    getUserGalleries as getUserGalleriesService,
+    getGalleryById,
+    deleteGallery,
+    postComment as postCommentService,
+    deleteComment
   } from "../../services/galleryService";
 
   export const getGalleries = (searchQuery = null) => async (dispatch) => {
@@ -20,7 +31,7 @@
       );
      
     } catch (error) {
-
+      throw error;
     }
   };
 
@@ -40,7 +51,7 @@
       );
      
     } catch (error) {
-
+      throw error;
     }
   };
   
@@ -58,7 +69,7 @@
       );
   
     } catch (error) {
-      
+      throw error;
     }
   };
   
@@ -79,7 +90,7 @@
       );
   
     } catch (error) {
-      
+      throw error;
     }
   };
 
@@ -87,10 +98,20 @@
     try {
       const response = await createGallery(gallery);
       const newGallery = response.data;
-      console.log(newGallery);
       dispatch(addGallery(newGallery));
     } catch (error) {
+      console.log(error);
       throw new Error(error);
+    }
+  };
+
+  export const getGallery = (id) => async (dispatch) => {
+    try {
+      const response = await getGalleryById(id);
+      const gallery = response.data;
+      dispatch(setCurrentGallery(gallery));
+    }catch (error){
+      throw error;
     }
   };
 
@@ -103,7 +124,40 @@
 
       dispatch(updateGallery(updatedGallery));
     } catch (error) {
-      
+      throw error;
+    }
+  };
+
+  export const removeGallery = (galleryId) => async (
+    dispatch
+  ) => {
+    try{
+      const response = await deleteGallery(galleryId);
+      dispatch(removeGallerySlice(galleryId));
+    }catch(error){
+      throw error;
+    }
+  };
+  
+  export const postComment = (comment) => async(
+    dispatch
+  ) => {
+    try{
+      const response = await postCommentService(comment);
+      dispatch(addComment(response.data));
+    }catch(error){
+      throw error;
+    }
+  };
+
+  export const removeComment = (commentId) => async (
+    dispatch
+  ) => {
+    try{
+      const response = await deleteComment(commentId);
+      dispatch(removeCommentSlice(commentId));
+    }catch(error){
+      throw error;
     }
   };
   
