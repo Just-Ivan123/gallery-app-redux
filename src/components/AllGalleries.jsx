@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { fetchGalleries, getGalleries } from '../store/gallery/galleryActions';
 
-
 const AllGalleries = () => {
 
   const dispatch = useDispatch();
@@ -67,6 +66,7 @@ const AllGalleries = () => {
                     >
                   <h3 className="card-text">{gallery.title}</h3>
                   </Link>
+                  <p>{new Date(gallery.created_at).toLocaleString()}</p>
                   <img
                     src={gallery.images[0].url}
                     className="card-img-top"

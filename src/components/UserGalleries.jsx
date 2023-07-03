@@ -85,6 +85,7 @@ const UserGalleries = () => {
                   <Link
                       to={`/galleries/author/${gallery.user.id}`}
                     >
+                      <p>{new Date(gallery.created_at).toLocaleString()}</p>
                   <div className="mb-1 text-body-secondary">
                     {gallery.user.first_name} {gallery.user.last_name} 
                   </div>
