@@ -39,13 +39,14 @@ const AllGalleries = () => {
 
   return (
     <div className="container">
-        <div className="mb-3">
+        <div className="d-flex mt-3" style={{ display: "flex", justifyContent: "center" }}>
           <input
             type="text"
-            className="form-control"
+            className="form-control mr-2"
             placeholder="Search..."
             value={searchQuery}
             onChange={handleSearchInputChange}
+            style= {{width: "30%"}}
           />
           <button className="btn btn-primary" onClick={handleSearchButtonClick}>
             Search
